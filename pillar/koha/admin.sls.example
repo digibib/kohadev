@@ -7,3 +7,5 @@ koha:
   adminpass: secret
   zebrauser: kohauser
   zebrapass: XXX
+  bz_user: email@bugzilla.com
+  bz_pass: bugzpassword

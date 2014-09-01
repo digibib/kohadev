@@ -1,0 +1,88 @@
+## KOHA GIT DEVELOPMENT VHOSTS
+{% set distro = salt['grains.get']('lsb_distrib_codename', '') %}
+
+# OPAC
+<VirtualHost *:{{ OpacPort }}>
+  Include /etc/koha/apache-shared.conf
+  #Include /etc/koha/apache-shared-opac-git.conf
+
+  ServerName {{ ServerName }}
+  DocumentRoot /usr/local/src/koha/koha-tmpl
+  
+
+  <Directory "/usr/local/src/koha">
+  Options All
+  AllowOverride All
+{% if distro == 'wheezy' %}
+  Allow from all
+{% else %}
+  Require all granted
+{% endif %}
+  </Directory>
+
+  SetEnv KOHA_CONF "/etc/koha/sites/{{ ServerName }}/koha-conf.xml"
+  SetEnv PERL5LIB "/usr/local/src/koha"
+  
+  SetEnv MEMCACHED_SERVERS ""
+  SetEnv MEMCACHED_NAMESPACE ""
+  AssignUserID {{ ServerName }}-koha {{ ServerName }}-koha
+
+
+  ScriptAlias /cgi-bin/koha/ "/usr/local/src/koha/opac/"
+  ScriptAlias /index.html "/usr/local/src/koha/opac/opac-main.pl"
+  ScriptAlias /search "/usr/local/src/koha/opac/opac-search.pl"
+  ScriptAlias /opac-search.pl "/usr/local/src/koha/opac/opac-search.pl"
+
+  RewriteCond %{QUERY_STRING} (.*?)(?:[A-Za-z0-9_-]+)=&(.*)
+  RewriteRule (.+) $1?%1%2 [N,R,NE]
+  RewriteRule ^/bib/([^\/]*)/?$ /cgi-bin/koha/opac-detail\.pl?bib=$1 [PT]
+  RewriteRule ^/isbn/([^\/]*)/?$ /search?q=isbn:$1 [PT]
+  RewriteRule ^/issn/([^\/]*)/?$ /search?q=issn:$1 [PT]
+
+   ErrorLog    /var/log/koha/{{ ServerName }}/dev-opac-error.log
+#  TransferLog /var/log/koha/{{ ServerName }}/dev-opac-access.log
+#  RewriteLog  /var/log/koha/{{ ServerName }}/dev-opac-rewrite.log
+</VirtualHost>
+
+
+# INTRANET
+<VirtualHost *:{{ IntraPort }}>
+  Include /etc/koha/apache-shared.conf
+  #Include /etc/koha/apache-shared-intranet-git.conf
+
+  ServerName {{ ServerName }}
+  DocumentRoot /usr/local/src/koha/koha-tmpl
+  
+  <Directory "/usr/local/src/koha">
+  Options All
+  AllowOverride All
+{% if distro == 'wheezy' %}
+  Allow from all
+{% else %}
+  Require all granted
+{% endif %}
+  </Directory>
+  
+  SetEnv KOHA_CONF "/etc/koha/sites/{{ ServerName }}/koha-conf.xml"
+  SetEnv PERL5LIB "/usr/local/src/koha"
+  
+  SetEnv MEMCACHED_SERVERS ""
+  SetEnv MEMCACHED_NAMESPACE ""
+  AssignUserID {{ ServerName }}-koha {{ ServerName }}-koha
+
+  ScriptAlias /cgi-bin/koha/ "/usr/local/src/koha/"
+  ScriptAlias /index.html "/usr/local/src/koha/mainpage.pl"
+  ScriptAlias /search "/usr/local/src/koha/search.pl"
+
+  RewriteCond %{QUERY_STRING} (.*?)(?:[A-Za-z0-9_-]+)=&(.*)
+  RewriteRule (.+) $1?%1%2 [N,R,NE]
+  RewriteRule ^/bib/([^\/]*)/?$ /cgi-bin/koha/detail\.pl?bib=$1 [PT]
+  RewriteRule ^/isbn/([^\/]*)/?$ /search?q=isbn:$1 [PT]
+  RewriteRule ^/issn/([^\/]*)/?$ /search?q=issn:$1 [PT]
+
+   ErrorLog    /var/log/koha/{{ ServerName }}/dev-intranet-error.log
+#  TransferLog /var/log/koha/{{ ServerName }}/dev-intranet-access.log
+#  RewriteLog  /var/log/koha/{{ ServerName }}/dev-intranet-rewrite.log
+</VirtualHost>
+
+

@@ -13,56 +13,12 @@ installdeps:
     - pkgs:
       - python-software-properties
       - software-properties-common
-      - libnet-ssleay-perl 
+      - libnet-ssleay-perl
       - libcrypt-ssleay-perl
+      - git
+      - tig
+      - mysql-server
     - skip_verify: True
-
-########
-# APACHE
-########
-
-apache2:
-  pkg.installed
-
-/etc/apache2/ports.conf:
-  file.append:
-    - text:
-      - Listen 8080
-      - Listen 8081
-    - stateful: True
-    - require:
-      - pkg: apache2
-
-sudo a2enmod rewrite:
-  cmd.run:
-    - require:
-      - pkg: apache2
-
-apache2_service:
-  service.running:
-    - name: apache2
-    - require:
-      - pkg: apache2
-      - cmd: sudo a2enmod rewrite
-      - cmd: sudo a2enmod cgi
-      - cmd: sudo a2dissite 000-default
-      - file: /etc/apache2/ports.conf
-
-koharepo:
-  pkgrepo.managed:
-    - name: deb http://debian.koha-community.org/koha squeeze main
-    - key_url: http://debian.koha-community.org/koha/gpg.asc
-
-##########
-# KOHA-COMMON
-##########
-
-koha-common:
-  pkg.installed:
-    - skip_verify: True
-    - require:
-      - pkgrepo: koharepo
-      - pkg: installdeps
 
 ##########
 # MYSQL
