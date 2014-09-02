@@ -14,5 +14,16 @@ up:
 provision:
 	vagrant provision
 
+setup: createdb gitify adminuser
+
+createdb:
+	vagrant ssh -c 'sudo salt-call --local state.sls koha.createdb'
+
+gitify:
+	vagrant ssh -c 'sudo salt-call --local state.sls koha.gitify'
+
+adminuser:
+	vagrant ssh -c 'sudo salt-call --local state.sls koha.adminuser'
+
 clean:
 	vagrant destroy --force
