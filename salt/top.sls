@@ -1,7 +1,13 @@
+# highstate: States to create a vanilla Koha development install 
 base:
   '*':
-    # highstate: States to create a vanilla Koha development install 
+    # prerequisites
     - koha
-    - koha.createdb
-    - koha.gitify
+    - koha.common
+    - koha.sites-config
     - koha.apache
+    - koha.webinstaller
+    # instance setup - should be run as states or pillared
+    #- koha.createdb
+    #- koha.gitify
+    #- koha.adminuser

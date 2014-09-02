@@ -11,5 +11,3 @@ koha-common:
     - skip_verify: True
     - require:
       - pkgrepo: koharepo
-      - pkg: installdeps
-      - pkg: install_apache2

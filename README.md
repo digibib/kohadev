@@ -8,6 +8,16 @@ It is intended to work as a basis for testing and creating patches on Koha maste
 Setup of the vagrant box inspired by: 
 https://mikegriffin.ie/blog/20130418-creating-a-debian-wheezy-base-box-for-vagrant/
 
+## TODO
+
+This box is not yet production ready!
+
+Missing: 
+ * cherrypicking or tag download from koha repo 
+ * rewrite duplicated states from ls.ext into separate repo
+ * test that phantomjs and watir are up and running
+ * decide howto setup specific states with patches
+
 ## Includes
 
 * Debian Wheezy 7 64bit
@@ -27,4 +37,5 @@ preinstalled Debian Wheezy image with koha instaled.
 
 ## Usage
 
-Info on applying patches, etc. will come
+`make` spins up the box
+`make provision` runs install of vanilla box
