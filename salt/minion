@@ -1,2 +1,2 @@
-master: localhost
-file_client: local
+master: 127.0.0.1
+state_verbose: False

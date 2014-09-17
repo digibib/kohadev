@@ -1,0 +1,22 @@
+# listen on the loopback in open mode
+interface: 127.0.0.1
+open_mode: True
+
+# use both the local roots as well as gitfs remotes
+fileserver_backend:
+  - roots
+  - git
+
+# map our project specific files to the local roots
+file_roots:
+  base:
+    - /srv/salt
+pillar_roots:
+  base:
+    - /srv/pillar
+
+# deichman gitfs remotes
+gitfs_remotes:
+  - https://github.com/digibib/saltdeploy.git:
+    - root: koha/salt/koha
+    - mountpoint: saltdeploy

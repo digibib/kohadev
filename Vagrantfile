@@ -31,13 +31,21 @@ Vagrant.configure(2) do |config|
   end
 
   # install salt stack on Debian
-  config.vm.provision :shell,
-    :inline => 'wget -O - http://bootstrap.saltstack.org | sudo sh'
+#  config.vm.provision :shell,
+#    :inline => 'wget -O - http://bootstrap.saltstack.org | sudo sh'
 
   config.vm.provision :salt do |salt|
+    salt.install_master = true
     salt.minion_config = "salt/minion"
-    salt.run_highstate = true
+    salt.master_config = "salt/master"
+    salt.run_highstate = false
     salt.verbose = true
+#    salt.master_key = "salt/keys/master.pem"
+#    salt.master_pub = "salt/keys/master.pub"
+#    salt.minion_key = "salt/keys/master.pem"
+#    salt.minion_pub = "salt/keys/master.pub"
+#    salt.seed_master = {master: "salt/keys/master.pub"}
+    salt.run_overstate = true
   end
 
   config.vm.provider :virtualbox do |vb|
